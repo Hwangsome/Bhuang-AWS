@@ -17,6 +17,9 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -36,6 +39,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "master",
     "jdk.selected.JAVA_MODULE": "corretto-17",
     "last_opened_file_path": "/Users/bhuang/code/study/Bhuang-AWS/Bhuang-AWS-Devloper/src/main/terraform/lambda-alb2",
     "node.js.detected.package.eslint": "true",
@@ -111,7 +115,7 @@
       <updated>1726730974802</updated>
       <workItem from="1726730975935" duration="42835000" />
       <workItem from="1727593648706" duration="20083000" />
-      <workItem from="1729496288433" duration="2423000" />
+      <workItem from="1729496288433" duration="3739000" />
     </task>
     <servers />
   </component>
