@@ -10,6 +10,18 @@ data "aws_subnets" "public" {
   }
 }
 
+data "aws_subnets" "private" {
+  filter {
+    name   = "tag:Name"
+    values = ["*private*"]
+  }
+
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.selected.id]
+  }
+}
+
 data "aws_vpc" "selected" {
   filter {
     name   = "tag:Name"
@@ -103,7 +115,7 @@ module "alb" {
 
           conditions = [{
             host_header = {
-              values           = ["${lower(var.name)}.${var.ecs_domain_name}"]
+              values           = ["${lower(var.ecs_service_name)}.${var.ecs_domain_name}"]
             }
           }]
         }
@@ -124,7 +136,7 @@ module "alb" {
         healthy_threshold   = 5
         interval            = 30
         matcher             = "200"
-        path                = "/info"
+        path                = "/health"
         port                = "traffic-port"
         protocol            = "HTTP"
         timeout             = 5

@@ -13,7 +13,7 @@ data "aws_subnets" "public" {
 data "aws_vpc" "selected" {
   filter {
     name   = "tag:Name"
-    values = ["ecs-cluster-vpc"]  # 使用精确的名称匹配
+    values = ["admin"]  # 使用精确的名称匹配
   }
 
   filter {
@@ -30,8 +30,46 @@ output "vpc_id" {
 output "public_subnet_ids" {
   value = data.aws_subnets.public.ids
 }
-
-
+#
+#resource "aws_lb" "ecs_cluster_alb" {
+#  name                             = "${var.cluster_name}-ALB"
+#  internal                         = false
+#  load_balancer_type               = "application"
+#  subnets                          = data.aws_subnets.public.ids
+#  security_groups = [aws_security_group.this["lb_security_group"].id]
+#}
+#
+#resource "aws_alb_listener" "ecs_alb_https_listener" {
+#  load_balancer_arn = aws_lb.ecs_cluster_alb.arn
+#  port              = 443
+#  protocol          = "HTTPS"
+#  ssl_policy        = "ELBSecurityPolicy-TLS-1-2-2017-01"
+#  certificate_arn   = aws_acm_certificate.ecs_domain_certificate.arn
+#
+#  default_action {
+#    type             = "forward"
+#    target_group_arn = aws_lb_target_group.ecs_default_target_group.arn
+#  }
+#
+#  depends_on = [aws_lb_target_group.ecs_default_target_group]
+#}
+#
+#
+#resource "aws_lb_target_group" "ecs_default_target_group" {
+#  name     = "saa-test-vpces-tg"
+#  port     = 80
+#  protocol = "HTTP"
+#  vpc_id   = data.aws_vpc.selected.id
+#
+#  health_check {
+#    healthy_threshold   = 3
+#    unhealthy_threshold = 2
+#    timeout             = 5
+#    interval            = 30
+#    path                = "/"
+#    protocol            = "HTTP"
+#  }
+#}
 
 module "alb" {
   source  = "terraform-aws-modules/alb/aws"
@@ -55,18 +93,11 @@ module "alb" {
       ip_protocol = "tcp"
       cidr_ipv4   = "0.0.0.0/0"
     }
-
-    https = {
-      from_port   = 443
-      to_port     = 443
-      ip_protocol = "tcp"
-      cidr_ipv4   = "0.0.0.0/0"
-    }
   }
   security_group_egress_rules = {
     all = {
       ip_protocol = "-1"
-      #      cidr_ipv4   = module.vpc.vpc_cidr_block
+#      cidr_ipv4   = module.vpc.vpc_cidr_block
       cidr_ipv4 = data.aws_vpc.selected.cidr_block
     }
   }
@@ -78,35 +109,6 @@ module "alb" {
 
       forward = {
         target_group_key = "ex_ecs"
-      }
-    }
-
-    ex_https = {
-      port              = 443
-      protocol          = "HTTPS"
-      certificate_arn   = aws_acm_certificate.ecs_domain_certificate.arn
-#      default is "ELBSecurityPolicy-TLS13-1-2-Res-2021-06"
-#      ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-Res-2021-06"
-
-      forward = {
-        target_group_key = "ex_ecs"
-      }
-
-      rules = {
-        ex-fixed-response = {
-          priority = 3
-          listener_key = "ex_https"
-          actions = [{
-            type         = "forward"
-            target_group_key = "ex_ecs"
-          }]
-
-          conditions = [{
-            host_header = {
-              values           = ["${lower(var.name)}.${var.ecs_domain_name}"]
-            }
-          }]
-        }
       }
     }
   }
@@ -137,3 +139,5 @@ module "alb" {
     }
   }
 }
+
+

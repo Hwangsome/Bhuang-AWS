@@ -43,3 +43,11 @@ build/
 **/terraform.tfstate
 **/terraform.tfstate.backup
 **/.terraform.lock.hcl
+
+
+**/.mvn
+**/mvnw
+**/mvnw.cmd
+**/target
+**/.gitattributes
+**/.mvn

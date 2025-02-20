@@ -1,0 +1,1 @@
+codestar_connection_arn="arn:aws:codestar-connections:us-east-1:058264261029:connection/1c754b53-14db-4d12-b435-38be834755a0"

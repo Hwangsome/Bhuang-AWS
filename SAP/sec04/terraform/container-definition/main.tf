@@ -3,6 +3,7 @@ data "aws_region" "current" {}
 locals {
   is_not_windows = contains(["LINUX"], var.operating_system_family)
 
+#  coalesce 返回 集合中第一个非空的值
   log_group_name = try(coalesce(var.cloudwatch_log_group_name, "/aws/ecs/${var.service}/${var.name}"), "")
 
   log_configuration = merge(
@@ -19,6 +20,7 @@ locals {
 
   linux_parameters = var.enable_execute_command ? merge({ "initProcessEnabled" : true }, var.linux_parameters) : merge({ "initProcessEnabled" : false }, var.linux_parameters)
 
+#  容器的健康检查， 默认不配置， 如果你需要配置， 请在调用模块的时候传入参数
   health_check = length(var.health_check) > 0 ? merge({
     interval = 30,
     retries  = 3,

@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="Bhuang-AWS-Devloper" />
+        <module name="springboot-app" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -17,6 +18,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="Bhuang-AWS" options="" />
       <module name="Bhuang-AWS-Devloper" options="-parameters" />
+      <module name="springboot-app" options="-parameters" />
       <module name="terraform" options="-parameters" />
     </option>
   </component>

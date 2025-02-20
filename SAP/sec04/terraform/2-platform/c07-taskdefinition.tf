@@ -6,9 +6,7 @@ module "container_definition" {
   source = "../container-definition"
 
   for_each = { for k, v in var.container_definitions : k => v if local.create_task_definition && try(v.create, true) }
-
   operating_system_family = try(var.runtime_platform.operating_system_family, "LINUX")
-
   # Container Definition
   command                  = try(each.value.command, var.container_definition_defaults.command, [])
   cpu                      = try(each.value.cpu, var.container_definition_defaults.cpu, null)
@@ -62,11 +60,11 @@ module "container_definition" {
 
   tags = var.tags
 }
-#
-#################################################################################
-## Task Definition
-#################################################################################
-#
+##
+##################################################################################
+### Task Definition
+##################################################################################
+##
 locals {
   create_task_definition = var.create && var.create_task_definition
 
@@ -76,10 +74,10 @@ locals {
   max_task_def_revision = local.create_task_definition ? max(aws_ecs_task_definition.ecs_container_definition[0].revision, data.aws_ecs_task_definition.this[0].revision) : 0
   task_definition       = local.create_task_definition ? "${aws_ecs_task_definition.ecs_container_definition[0].family}:${local.max_task_def_revision}" : var.task_definition_arn
 }
-
-# This allows us to query both the existing as well as Terraform's state and get
-# and get the max version of either source, useful for when external resources
-# update the container definition
+#
+## This allows us to query both the existing as well as Terraform's state and get
+## and get the max version of either source, useful for when external resources
+## update the container definition
 data "aws_ecs_task_definition" "this" {
   count = local.create_task_definition ? 1 : 0
 
@@ -98,6 +96,7 @@ resource "aws_ecs_task_definition" "ecs_container_definition" {
   container_definitions = jsonencode([for k, v in module.container_definition : v.container_definition])
   cpu                   = var.cpu
 
+#  The amount of ephemeral storage, in GiB, to allocate for the task. By default, your tasks hosted on AWS Fargate receive a minimum of 20 GiB of ephemeral storage.
   dynamic "ephemeral_storage" {
     for_each = length(var.ephemeral_storage) > 0 ? [var.ephemeral_storage] : []
 
@@ -106,7 +105,10 @@ resource "aws_ecs_task_definition" "ecs_container_definition" {
     }
   }
 
+#  A task execution IAM role is used by the container agent to make AWS API requests on your behalf.
   execution_role_arn = try(aws_iam_role.task_exec[0].arn, var.task_exec_iam_role_arn)
+#  A task IAM role allows containers in the task to make API requests to AWS services.
+  task_role_arn = try(aws_iam_role.tasks[0].arn, var.tasks_iam_role_arn)
   family             = coalesce(var.family, var.name)
 
   dynamic "inference_accelerator" {
@@ -118,11 +120,13 @@ resource "aws_ecs_task_definition" "ecs_container_definition" {
     }
   }
 
+# ipc_mode 是用于定义容器之间如何进行进程间通信（IPC, Inter-Process Communication）的配置选项。进程间通信是容器化应用程序中不同进程相互交流和交换数据的机制。
   ipc_mode     = var.ipc_mode
   memory       = var.memory
   network_mode = var.network_mode
   pid_mode     = var.pid_mode
 
+#  Task placement constraints are not supported for AWS Fargate launch type.
   dynamic "placement_constraints" {
     for_each = var.task_definition_placement_constraints
 
@@ -142,8 +146,10 @@ resource "aws_ecs_task_definition" "ecs_container_definition" {
     }
   }
 
+#  Set of launch types required by the task. The valid values are `EC2` and `FARGATE`. default is FARGATE
   requires_compatibilities = var.requires_compatibilities
 
+#  default = { operating_system_family = "LINUX" cpu_architecture = "X86_64" }
   dynamic "runtime_platform" {
     for_each = length(var.runtime_platform) > 0 ? [var.runtime_platform] : []
 
@@ -152,10 +158,10 @@ resource "aws_ecs_task_definition" "ecs_container_definition" {
       operating_system_family = try(runtime_platform.value.operating_system_family, null)
     }
   }
-
+#  If true, the task is not deleted when the service is deleted
   skip_destroy  = var.skip_destroy
-  task_role_arn = try(aws_iam_role.tasks[0].arn, var.tasks_iam_role_arn)
 
+# Configuration block for volumes that containers in your task may use
   dynamic "volume" {
     for_each = var.volume
 
@@ -256,6 +262,6 @@ resource "aws_ecs_task_definition" "ecs_container_definition" {
 #  }
 #}
 
-#output "task_definition" {
-#  value = module.ecs_container_definition.container_definition
+#output "container_definition" {
+#  value = module.container_definition
 #}

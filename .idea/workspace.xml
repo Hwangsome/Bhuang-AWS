@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc863acd-6842-40f7-a81e-87d4959b9ece" name="Changes" comment="" />
+    <list default="true" id="fc863acd-6842-40f7-a81e-87d4959b9ece" name="Changes" comment="add dynamodb poc" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -14,11 +14,21 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Python Script" />
+        <option value="Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="bhuang &lt;biaohwang6@gmail.com&gt;" />
+      </list>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/springboot-app/deploy/deploy.sh" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -30,18 +40,25 @@
   &quot;associatedIndex&quot;: 7
 }</component>
   <component name="ProjectId" id="2mHQJxzZlli3jodIhuHs16vWGTd" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Python.invoke-lambda.executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "master",
     "jdk.selected.JAVA_MODULE": "corretto-17",
-    "last_opened_file_path": "/Users/bhuang/code/study/Bhuang-AWS/Bhuang-AWS-Devloper/src/main/terraform/lambda-alb2",
+    "last_opened_file_path": "/Users/bhuang/code/Bhuang-AWS/aws-dynamodb-poc/开发/crud_dynamodb",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -54,18 +71,19 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/Bhuang-AWS-Devloper/src/main/terraform/lambda-alb2" />
-      <recent name="$PROJECT_DIR$/Bhuang-AWS-Devloper/src/main/terraform/sqs-sns" />
-      <recent name="$PROJECT_DIR$/Bhuang-AWS-Devloper/src/main/terraform/sqs" />
-      <recent name="$PROJECT_DIR$/Bhuang-AWS-Devloper/src/main/terraform/lambda" />
-      <recent name="$PROJECT_DIR$/Bhuang-AWS-Devloper/src/main/terraform/lambda-alb" />
+      <recent name="$PROJECT_DIR$/aws-dynamodb-poc/开发/crud_dynamodb" />
+      <recent name="$PROJECT_DIR$/aws-dynamodb-poc/2-工作方式" />
+      <recent name="$PROJECT_DIR$/SAP/sec04/terraform/3-pipeline-v2" />
+      <recent name="$PROJECT_DIR$/SAP/sec04/terraform/3-pipeline-v2/codepipeline" />
+      <recent name="$PROJECT_DIR$/SAP/sec04/terraform/3-pipeline-v1" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/springboot-app/deploy" />
       <recent name="$PROJECT_DIR$/Bhuang-AWS-Devloper/src/main/terraform/lambda-alb" />
       <recent name="$PROJECT_DIR$/img" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.BhuangAwsApplication">
+  <component name="RunManager" selected="Spring Boot.SpringbootAppApplication">
     <configuration name="invoke-lambda" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Bhuang-AWS" />
       <option name="ENV_FILES" value="" />
@@ -96,6 +114,23 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="SpringbootAppApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="springboot-app" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.bhuang.springbootapp.SpringbootAppApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="lua.app" factoryName="Lua Application">
+      <option name="program" value="lua" />
+      <option name="file" value="" />
+      <option name="workingDir" value="$PROJECT_DIR$/springboot-app/src/main/java" />
+      <option name="debuggerType" value="2" />
+      <option name="params" value="" />
+      <option name="charset" value="UTF-8" />
+      <option name="showConsole" value="true" />
+      <method v="2" />
+    </configuration>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -116,10 +151,48 @@
       <workItem from="1726730975935" duration="42835000" />
       <workItem from="1727593648706" duration="20083000" />
       <workItem from="1729496288433" duration="3739000" />
+      <workItem from="1736844102707" duration="52000" />
+      <workItem from="1737082192649" duration="5634000" />
+      <workItem from="1737101259166" duration="5578000" />
+      <workItem from="1737356719605" duration="121654000" />
     </task>
+    <task id="LOCAL-00001" summary="add platform resource and ecs taskdefinition template">
+      <option name="closed" value="true" />
+      <created>1737107050838</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1737107050838</updated>
+    </task>
+    <task id="LOCAL-00002" summary="add dynamodb poc">
+      <option name="closed" value="true" />
+      <created>1740042139185</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1740042139185</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="part02 not complete" />
+    <MESSAGE value="add platform resource and ecs taskdefinition template" />
+    <MESSAGE value="add dynamodb poc" />
+    <option name="LAST_COMMIT_MESSAGE" value="add dynamodb poc" />
   </component>
 </project>

@@ -67,7 +67,7 @@ variable "security_group_description" {
 variable "security_group_rules" {
   description = "Security group rules to add to the security group created"
   type = map(object({
-    security_group_name = string
+    security_group_name = string  
     type               = string
     from_port         = number
     to_port           = number
@@ -116,6 +116,7 @@ variable "security_group_config" {
 }
 
 
+
 ################################################################################
 # Task Definition
 ################################################################################
@@ -144,29 +145,16 @@ variable "ignore_task_definition_changes" {
   default     = false
 }
 
-#variable "alarms" {
-#  description = "Information about the CloudWatch alarms"
-#  type = object({
-#    alarm_names = optional(list(string),[])
-#    enable      = optional(bool, true)
-#    rollback    = optional(bool, true)
-#  })
-#  default = {}
-#}
-
 variable "alarms" {
   description = "Information about the CloudWatch alarms"
   type        = any
   default     = {}
 }
+
 variable "capacity_provider_strategy" {
   description = "Capacity provider strategies to use for the service. Can be one or more"
-  type = map(object({
-    capacity_provider = string
-    weight           = number
-    base             = optional(number)
-  }))
-  default = {}
+  type        = any
+  default     = {}
 }
 
 variable "cluster_arn" {
@@ -177,14 +165,8 @@ variable "cluster_arn" {
 
 variable "deployment_circuit_breaker" {
   description = "Configuration block for deployment circuit breaker"
-  type = object({
-    enable   = bool
-    rollback = bool
-  })
-  default = {
-    enable   = false
-    rollback = false
-  }
+  type        = any
+  default     = {}
 }
 
 variable "deployment_controller" {
@@ -243,15 +225,9 @@ variable "launch_type" {
 
 variable "load_balancer" {
   description = "Configuration block for load balancers"
-  type = map(object({
-    target_group_arn = string
-    container_name   = string
-    container_port   = number
-    elb_name        = optional(string)
-  }))
-  default = {}
+  type        = any
+  default     = {}
 }
-
 
 variable "assign_public_ip" {
   description = "Assign a public IP address to the ENI (Fargate launch type only)"
@@ -312,7 +288,6 @@ variable "service_registries" {
   type        = any
   default     = {}
 }
-
 
 variable "timeouts" {
   description = "Create, update, and delete timeout configurations for the service"
@@ -414,129 +389,10 @@ variable "task_definition_arn" {
   default     = null
 }
 
-#variable "container_definitions" {
-#  description = "A map of valid [container definitions](http://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ContainerDefinition.html). Please note that you should only provide values that are part of the container definition document"
-#  type        = any
-#  default     = {}
-#}
 variable "container_definitions" {
-  description = "容器定义配置映射"
-  type = map(object({
-    name                     = string
-    image                    = string
-    cpu                      = optional(number)
-    memory                   = optional(number)
-    memory_reservation       = optional(number)
-    essential               = optional(bool)
-    create                  = optional(bool, true)
-
-    # 网络配置
-    disable_networking      = optional(bool)
-    dns_search_domains     = optional(list(string), [])
-    dns_servers            = optional(list(string),[])
-    hostname               = optional(string)
-    links                  = optional(list(string),[])
-    port_mappings         = optional(list(object({
-      name          = optional(string)
-      containerPort = number
-      hostPort      = optional(number)
-      protocol      = optional(string)
-    })))
-
-    # 命令和环境配置
-    command                = optional(list(string),[])
-    entrypoint            = optional(list(string),[])
-    environment           = optional(list(object({
-      name  = string
-      value = string
-    })),[])
-    environment_files     = optional(list(object({
-      value = string
-      type  = string
-    })),[])
-    working_directory     = optional(string)
-    enable_execute_command = optional(bool, true)
-    interactive = optional(bool)
-    pseudo_terminal = optional(bool)
-
-    # 依赖配置
-    dependencies         = optional(list(object({
-      containerName = string
-      condition     = string
-    })),[])
-
-    # 存储配置
-    mount_points         = optional(list(object({
-      sourceVolume  = string
-      containerPath = string
-      readOnly      = optional(bool)
-    })))
-    volumes_from        = optional(list(object({
-      sourceContainer = string
-      readOnly        = optional(bool)
-    })))
-
-    # 安全配置
-    docker_security_options = optional(list(string),[])
-    privileged            = optional(bool)
-    readonly_root_filesystem = optional(bool)
-    user                  = optional(string)
-
-    # 资源和限制配置
-    ulimits              = optional(list(object({
-      name      = string
-      softLimit = number
-      hardLimit = number
-    })), [])
-    linux_parameters     = optional(map(string))
-
-    # 健康检查配置
-#    health_check        = optional(object({
-#      command     = list(string)
-#      interval    = optional(number)
-#      timeout     = optional(number)
-#      retries     = optional(number)
-#      startPeriod = optional(number)
-#    }))
-
-    # 日志配置
-    enable_cloudwatch_logging              = optional(bool, true)
-    create_cloudwatch_log_group            = optional(bool)
-    cloudwatch_log_group_name              = optional(string)
-    cloudwatch_log_group_retention_in_days = optional(number)
-    cloudwatch_log_group_kms_key_id        = optional(string)
-#    log_configuration = optional(list(object({
-#      logDriver = string
-#      options   = optional(map(string))
-#    })))
-    cloudwatch_log_group_use_name_prefix = optional(bool, false)
-
-    # 其他配置
-    resource_requirements = optional(list(object({
-      value = string
-      type  = string
-    })),[])
-    start_timeout = optional(number)
-    stop_timeout  = optional(number)
-    secrets       = optional(list(object({
-      name      = string
-      valueFrom = string
-    })), [])
-    docker_labels       = optional(map(string))
-    extra_hosts        = optional(list(object({
-      hostname  = string
-      ipAddress = string
-    })),[])
-    repository_credentials = optional(object({
-    }),{})
-
-    firelens_configuration = optional(map(string),{})
-    system_controls    = optional(list(object({
-      namespace = string
-      value    = string
-    })), [])
-  }))
-  default = {}
+  description = "A map of valid [container definitions](http://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ContainerDefinition.html). Please note that you should only provide values that are part of the container definition document"
+  type        = any
+  default     = {}
 }
 
 variable "container_definition_defaults" {
