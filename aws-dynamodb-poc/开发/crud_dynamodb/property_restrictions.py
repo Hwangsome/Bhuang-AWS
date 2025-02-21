@@ -510,6 +510,130 @@ class DynamoDBCRUD:
         except Exception as e:
             return {'success': False, 'message': f'批量更新失败: {str(e)}'}
 
+    def get_items_by_property_id(self, property_id: str) -> Dict:
+        """
+        获取指定propertyId的所有数据
+        """
+        try:
+            response = self.table.query(
+                KeyConditionExpression='propertyId = :pid',
+                ExpressionAttributeValues={
+                    ':pid': property_id
+                }
+            )
+            
+            if 'Items' in response:
+                # 将Decimal类型转换为int或float
+                items = []
+                for item in response['Items']:
+                    formatted_item = {}
+                    for key, value in item.items():
+                        if isinstance(value, Decimal):
+                            # 如果是整数，转换为int，否则转换为float
+                            formatted_item[key] = int(value) if value % 1 == 0 else float(value)
+                        else:
+                            formatted_item[key] = value
+                    items.append(formatted_item)
+                
+                return {
+                    'success': True,
+                    'message': f'找到 {len(items)} 条记录',
+                    'items': items
+                }
+            else:
+                return {
+                    'success': False,
+                    'message': '未找到数据'
+                }
+            
+        except Exception as e:
+            return {
+                'success': False,
+                'message': f'查询失败: {str(e)}'
+            }
+
+    def test_empty_string_behavior(self) -> Dict:
+        """
+        测试向DynamoDB插入空字符串的行为
+        注意：DynamoDB 不允许在索引键（包括GSI和LSI）中使用空字符串
+        """
+        try:
+            # 创建包含空字符串的测试数据，但避免在索引键中使用空字符串
+            test_items = [
+                {
+                    "propertyId": "266270522",
+                    "restrictionId": "empty_test_1",
+                    "stayDate": "2025-02-21",  # 索引键不能为空
+                    "sellState": 1,            # 索引键不能为空
+                    "cutOffDays": None,        # 测试 None 值
+                    "advancePurchaseMin": "",  # 测试空字符串
+                    "advancePurchaseMax": 1,
+                    "closedToArrival": "",     # 测试空字符串
+                    "closedToDeparture": None, # 测试 None 值
+                    "fullPartnerLosArrival": 268435455,
+                    "fullPartnerLosStayThrough": "",  # 测试空字符串
+                    "doaCostPriceChangeBool": 1,
+                    "versionId": "",           # 测试空字符串
+                    "updateTpId": None,        # 测试 None 值
+                    "updateTuId": "",          # 测试空字符串
+                    "updateDate": "2025-02-21",  # 索引键不能为空
+                    "changeRequestSourceId": None, # 测试 None 值
+                    "availabilityLevel": ""      # 测试空字符串
+                }
+            ]
+
+            results = []
+            # 插入测试数据
+            for item in test_items:
+                result = self.create_item(item)
+                results.append(result)
+                print(f"\n插入数据结果: {result['message']}")
+
+            # 查询并验证插入的数据
+            for item in test_items:
+                response = self.table.get_item(
+                    Key={
+                        'propertyId': item['propertyId'],
+                        'restrictionId': item['restrictionId']
+                    }
+                )
+                if 'Item' in response:
+                    print(f"\n成功检索到数据 {item['restrictionId']}:")
+                    retrieved_item = response['Item']
+                    print("\n空值字段的实际存储情况:")
+                    test_fields = [
+                        'cutOffDays',           # None 值
+                        'advancePurchaseMin',   # 空字符串
+                        'closedToArrival',      # 空字符串
+                        'closedToDeparture',    # None 值
+                        'fullPartnerLosStayThrough',  # 空字符串
+                        'versionId',            # 空字符串
+                        'updateTpId',           # None 值
+                        'updateTuId',           # 空字符串
+                        'changeRequestSourceId', # None 值
+                        'availabilityLevel'     # 空字符串
+                    ]
+                    for key in test_fields:
+                        if key in retrieved_item:
+                            value = retrieved_item[key]
+                            print(f"- {key}: '{value}' (类型: {type(value).__name__})")
+                        else:
+                            print(f"- {key}: 字段不存在")
+                else:
+                    print(f"\n未找到数据 {item['restrictionId']}")
+
+            return {
+                'success': True,
+                'message': '空字符串测试完成',
+                'results': results
+            }
+
+        except Exception as e:
+            return {
+                'success': False,
+                'message': f'测试空字符串时出错: {str(e)}'
+            }
+
 def main():
     try:
         # 初始化 DynamoDB 客户端
@@ -544,27 +668,19 @@ def main():
                 print(f"\n访问表时出错: {str(e)}")
                 return
 
-        # 查看表的索引信息
-        print("\n获取表的索引信息:")
-        index_info = crud.describe_table_indexes()
-        if index_info['success']:
-            info = index_info['data']
-            print(f"\n表名: {info['table_name']}")
-            print(f"主键: {', '.join(info['primary_key'])}")
-            
-            print("\n全局二级索引 (GSI):")
-            for gsi in info['gsi']:
-                print(f"- 索引名称: {gsi['name']}")
-                print(f"  键架构: {', '.join(gsi['key_schema'])}")
-                print(f"  投影类型: {gsi['projection_type']}")
-            
-            print("\n本地二级索引 (LSI):")
-            for lsi in info['lsi']:
-                print(f"- 索引名称: {lsi['name']}")
-                print(f"  键架构: {', '.join(lsi['key_schema'])}")
-                print(f"  投影类型: {lsi['projection_type']}")
+        # 测试空字符串行为
+        print("\n开始测试空字符串行为:")
+        empty_string_test = crud.test_empty_string_behavior()
+        if not empty_string_test['success']:
+            print(empty_string_test['message'])
+
+        # 查询指定propertyId的数据
+        print("\n查询propertyId为266270522的数据:")
+        result = crud.get_items_by_property_id("266270522")
+        if result['success']:
+            print(json.dumps(result['items'], indent=2, ensure_ascii=False))
         else:
-            print(index_info['message'])
+            print(result['message'])
 
     except Exception as e:
         print(f"错误: {str(e)}")
