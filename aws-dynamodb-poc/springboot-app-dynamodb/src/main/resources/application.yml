@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: springboot-app-dynamodb
+
+aws:
+  dynamodb:
+    endpoint: http://localhost:8000
+    region: us-west-2
+    accessKey: dummy
+    secretKey: dummy
+
+  
+
+server:
+  port: 8081

@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc863acd-6842-40f7-a81e-87d4959b9ece" name="Changes" comment="add dynamodb poc" />
+    <list default="true" id="fc863acd-6842-40f7-a81e-87d4959b9ece" name="Changes" comment="add dynamodb poc">
+      <change afterPath="$PROJECT_DIR$/aws-dynamodb-poc/img/img_3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/aws-dynamodb-poc/img/img_4.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws-dynamodb-poc/开发/crud_dynamodb/test_dynamodb.py" beforeDir="false" afterPath="$PROJECT_DIR$/aws-dynamodb-poc/开发/crud_dynamodb/test_dynamodb.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -64,8 +68,12 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
     "ruby.rails.projectView.checked": "true",
-    "spring.configuration.checksum": "df31a85e769c40900203c63aa234a7f5",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "spring.configuration.checksum": "ed34c17f6fac596480ad2c9df990c0f0",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -83,7 +91,7 @@
       <recent name="$PROJECT_DIR$/img" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.SpringbootAppApplication">
+  <component name="RunManager" selected="Spring Boot.DynamoDbApplication">
     <configuration name="invoke-lambda" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Bhuang-AWS" />
       <option name="ENV_FILES" value="" />
@@ -114,22 +122,19 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="DynamoDbApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="springboot-app-dynamodb" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.dynamodb.DynamoDbApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="SpringbootAppApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="springboot-app" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.bhuang.springbootapp.SpringbootAppApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
-    </configuration>
-    <configuration default="true" type="lua.app" factoryName="Lua Application">
-      <option name="program" value="lua" />
-      <option name="file" value="" />
-      <option name="workingDir" value="$PROJECT_DIR$/springboot-app/src/main/java" />
-      <option name="debuggerType" value="2" />
-      <option name="params" value="" />
-      <option name="charset" value="UTF-8" />
-      <option name="showConsole" value="true" />
-      <method v="2" />
     </configuration>
   </component>
   <component name="SharedIndexes">
@@ -155,6 +160,7 @@
       <workItem from="1737082192649" duration="5634000" />
       <workItem from="1737101259166" duration="5578000" />
       <workItem from="1737356719605" duration="122070000" />
+      <workItem from="1740194837321" duration="8784000" />
     </task>
     <task id="LOCAL-00001" summary="add platform resource and ecs taskdefinition template">
       <option name="closed" value="true" />

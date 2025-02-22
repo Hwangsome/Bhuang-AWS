@@ -155,6 +155,32 @@ class DynamoDBTest:
                 'message': f'获取记录失败: {str(e)}'
             }
 
+    def get_item_with_metadata(self, key: Dict) -> Dict:
+        """
+        通过主键获取单条记录，包括元数据
+        """
+        try:
+            response = self.table.get_item(
+                Key=key
+            )
+            
+            item = response.get('Item')
+            metadata = response.get('ResponseMetadata')
+            index_used = metadata.get('ConsumedCapacity', {}).get('TableName') is not None
+
+            return {
+                'success': True,
+                'message': '记录获取成功',
+                'item': item,
+                'metadata': metadata,
+                'index_used': index_used
+            }
+        except ClientError as e:
+            return {
+                'success': False,
+                'message': f'获取记录失败: {str(e)}'
+            }
+
     # def query_by_stay_date(self, stay_date: str, sell_state: Optional[int] = None) -> Dict:
         """
         通过stayDate和可选的sellState查询记录
@@ -646,9 +672,9 @@ def main():
     # 统计不同sellState的数据分布
     # print("\n7. 统计不同sellState的数据分布:")
     # for sell_state in [1, 2, 3]:
-        query_result = dynamo_test.query_by_stay_date("2025-02-01", sell_state)
+        query_result = dynamo_test.query_by_stay_date("2025-02-01", sell_state=1)
         if query_result['success']:
-            print(f"sellState={sell_state} 的数据数量: {len(query_result['items'])}")
+            print(f"sellState=1 的数据数量: {len(query_result['items'])}")
             if query_result['items']:
                 print("示例数据的固定值字段:")
                 first_item = query_result['items'][0]
@@ -666,7 +692,25 @@ def main():
                     if field in first_item:
                         print(f"  {field}: {first_item[field]}")
         else:
-            print(f"查询 sellState={sell_state} 失败: {query_result['message']}")
+            print(f"查询 sellState=1 失败: {query_result['message']}")
+
+    # 测试获取单条记录，包括元数据
+    print("\n8. 测试获取单条记录，包括元数据:")
+    key = {
+        'availabilityId': 'your_availability_id',
+        'stayDate': '2025-02-01'
+    }
+    result = dynamo_test.get_item_with_metadata(key)
+    if result['success']:
+        print("记录获取成功，包括元数据")
+        print("记录:")
+        print(json.dumps(result['item'], indent=2, ensure_ascii=False))
+        print("元数据:")
+        print(json.dumps(result['metadata'], indent=2, ensure_ascii=False))
+        print("索引使用情况:")
+        print(result['index_used'])
+    else:
+        print(result['message'])
 
 if __name__ == "__main__":
     main()
