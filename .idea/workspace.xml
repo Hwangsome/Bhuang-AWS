@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc863acd-6842-40f7-a81e-87d4959b9ece" name="Changes" comment="add dynamodb poc">
-      <change afterPath="$PROJECT_DIR$/aws-dynamodb-poc/img/img_3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/aws-dynamodb-poc/img/img_4.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aws-dynamodb-poc/开发/crud_dynamodb/test_dynamodb.py" beforeDir="false" afterPath="$PROJECT_DIR$/aws-dynamodb-poc/开发/crud_dynamodb/test_dynamodb.py" afterDir="false" />
-    </list>
+    <list default="true" id="fc863acd-6842-40f7-a81e-87d4959b9ece" name="Changes" comment="add dynamodb poc" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -160,7 +156,7 @@
       <workItem from="1737082192649" duration="5634000" />
       <workItem from="1737101259166" duration="5578000" />
       <workItem from="1737356719605" duration="122070000" />
-      <workItem from="1740194837321" duration="8784000" />
+      <workItem from="1740194837321" duration="10891000" />
     </task>
     <task id="LOCAL-00001" summary="add platform resource and ecs taskdefinition template">
       <option name="closed" value="true" />
@@ -178,7 +174,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740042139185</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="add dynamodb poc">
+      <option name="closed" value="true" />
+      <created>1740213977405</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1740213977405</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
